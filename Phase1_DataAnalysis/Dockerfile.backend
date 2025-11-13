@@ -1,0 +1,57 @@
+# ==============================================================
+# 🐍 Base Image
+# ==============================================================
+FROM python:3.10-slim
+
+# ==============================================================
+# ⚙️ Environment Variables
+# ==============================================================
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+# ==============================================================
+# 📁 Set Working Directory
+# ==============================================================
+WORKDIR /app
+
+# ==============================================================
+# 🧩 Install System Dependencies
+# ==============================================================
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxrender1 \
+    libxext6 \
+    ffmpeg \
+    git \
+    wget \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+# ==============================================================
+# 📦 Copy Python Requirements First (for caching)
+# ==============================================================
+COPY requirements.txt .
+
+# Upgrade pip and install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# ==============================================================
+# 🧠 Copy Application Code
+# ==============================================================
+COPY . .
+
+# ==============================================================
+# 🔓 Expose Backend Port
+# ==============================================================
+EXPOSE 8000
+
+# ==============================================================
+# 🏁 Default Command
+# ==============================================================
+# Use 0.0.0.0 to make Django accessible outside the container
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

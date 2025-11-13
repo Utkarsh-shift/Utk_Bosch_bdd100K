@@ -3,9 +3,11 @@
 *.jpeg filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
 *.mp4 filter=lfs diff=lfs merge=lfs -text
-
 # logs / evaluation
 *.log filter=lfs diff=lfs merge=lfs -text
 *.json filter=lfs diff=lfs merge=lfs -text
 runs/* filter=lfs diff=lfs merge=lfs -text
 checkpoints/* filter=lfs diff=lfs merge=lfs -text
+Phase1_DataAnalysis/**/*.mp4 filter=lfs diff=lfs merge=lfs -text
+Phase1_DataAnalysis/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+Phase1_DataAnalysis/**/*.png filter=lfs diff=lfs merge=lfs -text
