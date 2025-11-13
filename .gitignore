@@ -69,6 +69,9 @@ gt_labels/
 Phase2_Model/bdd100k_yolo/
 Phase2_Model/bdd100k_yolo_subset/
 Phase2_Model/checkpoints/
+# Phase 3 evaluation outputs (YOLO val results)
+Phase3_eval_viz/evaluation/results/
+Phase3_eval_viz/evaluation/results/*
 
 # ==============================
 #  Label and cache files
