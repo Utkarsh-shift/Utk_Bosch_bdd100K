@@ -1,3 +1,98 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a488c20add515d925ac900a7299b1b2c99e678d82d4eb1925dcea35316f6b504
-size 2466
+{
+  "train": {
+    "class_counts": {
+      "car": 713211,
+      "lane": 528643,
+      "traffic sign": 239686,
+      "traffic light": 186117,
+      "drivable area": 125723,
+      "person": 91349,
+      "truck": 29971,
+      "bus": 11672,
+      "bike": 7210,
+      "rider": 4517,
+      "motor": 3002,
+      "train": 136
+    },
+    "class_percent": {
+      "car": 36.74,
+      "lane": 27.23,
+      "traffic sign": 12.35,
+      "traffic light": 9.59,
+      "drivable area": 6.48,
+      "person": 4.71,
+      "truck": 1.54,
+      "bus": 0.6,
+      "bike": 0.37,
+      "rider": 0.23,
+      "motor": 0.15,
+      "train": 0.01
+    },
+    "total_images": 69863,
+    "total_objects": 1941237,
+    "log_class_counts": {
+      "car": 5.853218641696166,
+      "lane": 5.723163307418365,
+      "traffic sign": 5.3796444796683245,
+      "traffic light": 5.26978837701387,
+      "drivable area": 5.099418189958432,
+      "person": 4.9607085516885565,
+      "truck": 4.4767157239260635,
+      "bus": 4.067182485523405,
+      "bike": 3.857995495560924,
+      "rider": 3.6549462265843444,
+      "motor": 3.477555332198981,
+      "train": 2.1367205671564067
+    }
+  },
+  "val": {
+    "class_counts": {
+      "car": 102506,
+      "lane": 75730,
+      "traffic sign": 34908,
+      "traffic light": 26885,
+      "drivable area": 17981,
+      "person": 13262,
+      "truck": 4245,
+      "bus": 1597,
+      "bike": 1007,
+      "rider": 649,
+      "motor": 452,
+      "train": 15
+    },
+    "class_percent": {
+      "car": 36.71,
+      "lane": 27.12,
+      "traffic sign": 12.5,
+      "traffic light": 9.63,
+      "drivable area": 6.44,
+      "person": 4.75,
+      "truck": 1.52,
+      "bus": 0.57,
+      "bike": 0.36,
+      "rider": 0.23,
+      "motor": 0.16,
+      "train": 0.01
+    },
+    "total_images": 10000,
+    "total_objects": 279237,
+    "log_class_counts": {
+      "car": 5.010753523514418,
+      "lane": 4.879273691561369,
+      "traffic sign": 4.5429374082326195,
+      "traffic light": 4.429526194296687,
+      "drivable area": 4.254837993329288,
+      "person": 4.122641769625536,
+      "truck": 3.62797998982998,
+      "bus": 3.2035767749779724,
+      "bike": 3.0034605321095067,
+      "rider": 2.8129133566428557,
+      "motor": 2.656098202012832,
+      "train": 1.2041199826559248
+    }
+  },
+  "Last Computed": "2025-11-12 17:34:23",
+  "meta": {
+    "cache_status": "hit"
+  }
+}

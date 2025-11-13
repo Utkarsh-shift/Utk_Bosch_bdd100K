@@ -1,3 +1,175 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:217c99a5f76459338fd8dcd12156163d5877d8ca5286e63f8cf23deecb3b0e9f
-size 4899
+{
+  "subset": "train",
+  "sample_size_per_class": 300,
+  "per_class_quality": {
+    "traffic sign": {
+      "exposure_mean": 75.12035122974537,
+      "exposure_std": 37.785425216221654,
+      "contrast_mean": 51.01687671014981,
+      "contrast_std": 16.326072043014467,
+      "sharpness_mean": 227.49496545293368,
+      "colorfulness_mean": 24.370976153248787,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "traffic light": {
+      "exposure_mean": 70.63331660517939,
+      "exposure_std": 36.189540529186644,
+      "contrast_mean": 49.57693886311025,
+      "contrast_std": 16.021450552858706,
+      "sharpness_mean": 229.75958612334094,
+      "colorfulness_mean": 23.308779966055994,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "car": {
+      "exposure_mean": 76.10698024450231,
+      "exposure_std": 37.897499771187235,
+      "contrast_mean": 51.46886424206101,
+      "contrast_std": 16.472832705736153,
+      "sharpness_mean": 232.2736208082807,
+      "colorfulness_mean": 24.491009299256067,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "rider": {
+      "exposure_mean": 86.25180651403358,
+      "exposure_std": 30.399618042309385,
+      "contrast_mean": 56.14676188949727,
+      "contrast_std": 12.597599144977895,
+      "sharpness_mean": 293.77655139729916,
+      "colorfulness_mean": 25.01971633075336,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "motor": {
+      "exposure_mean": 84.15191674985532,
+      "exposure_std": 33.54174882675892,
+      "contrast_mean": 54.575446253114045,
+      "contrast_std": 13.898663215524092,
+      "sharpness_mean": 266.116804244445,
+      "colorfulness_mean": 24.94994508674649,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "drivable area": {
+      "exposure_mean": 75.37759737413195,
+      "exposure_std": 38.200628806371284,
+      "contrast_mean": 50.91936677394505,
+      "contrast_std": 16.63088313342645,
+      "sharpness_mean": 224.8068081971716,
+      "colorfulness_mean": 24.172430602350452,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "lane": {
+      "exposure_mean": 76.2634863245081,
+      "exposure_std": 38.16915325793321,
+      "contrast_mean": 51.42802965891504,
+      "contrast_std": 16.50250936944695,
+      "sharpness_mean": 231.1470881491065,
+      "colorfulness_mean": 24.23359481439352,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "person": {
+      "exposure_mean": 85.33788267144097,
+      "exposure_std": 28.158368126350073,
+      "contrast_mean": 56.59325283738023,
+      "contrast_std": 11.684553940913048,
+      "sharpness_mean": 320.67635600378065,
+      "colorfulness_mean": 25.82820414702858,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "bus": {
+      "exposure_mean": 90.16472547019677,
+      "exposure_std": 31.194571623671703,
+      "contrast_mean": 56.682654810255436,
+      "contrast_std": 12.924350893679613,
+      "sharpness_mean": 305.07009307941934,
+      "colorfulness_mean": 25.96533829030279,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "truck": {
+      "exposure_mean": 87.18412938368056,
+      "exposure_std": 32.91391957006618,
+      "contrast_mean": 56.21195726768525,
+      "contrast_std": 13.938060178572119,
+      "sharpness_mean": 291.7786039137584,
+      "colorfulness_mean": 26.230829829787375,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "bike": {
+      "exposure_mean": 84.90608270037616,
+      "exposure_std": 29.296122458131677,
+      "contrast_mean": 55.32672661533647,
+      "contrast_std": 12.178670589615129,
+      "sharpness_mean": 310.92442084996566,
+      "colorfulness_mean": 25.318965286054542,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 300
+    },
+    "train": {
+      "exposure_mean": 81.01183051215278,
+      "exposure_std": 45.41119107077558,
+      "contrast_mean": 51.931358617455096,
+      "contrast_std": 17.375902836277376,
+      "sharpness_mean": 214.17783206533326,
+      "colorfulness_mean": 27.210092386476152,
+      "avg_resolution": [
+        1280.0,
+        720.0
+      ],
+      "corrupt_count": 0,
+      "num_samples": 14
+    }
+  },
+  "Last Computed": "2025-11-12 20:02:08.148494"
+}

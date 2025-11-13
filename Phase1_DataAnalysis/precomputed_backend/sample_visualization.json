@@ -1,3 +1,166 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4c8fa91c6dd328c861b168d8c793561dc3208db058d1f881fbedf27bc6f5a8cf
-size 3485
+{
+  "1_basic_samples": [
+    "2ef09e65-2e2b45c5.jpg",
+    "2f0e55f5-87f47cb5.jpg",
+    "2f1b0278-c688a1a3.jpg",
+    "2f1cd330-f6f7438b.jpg",
+    "2f20bd07-e4abcb4f.jpg",
+    "2f26b25d-30af670d.jpg",
+    "2f45c868-4399445f.jpg",
+    "2f612db4-1fb3f5c1.jpg",
+    "2f97ca3c-009da805.jpg",
+    "2f9a2442-aa18b5f0.jpg",
+    "2f9b296d-56c0fd80.jpg",
+    "2f9ea96e-be1be714.jpg",
+    "2fa21b62-4c0b5f0f.jpg",
+    "2fc9ad1e-9e5ff544.jpg"
+  ],
+  "2_extreme_density": {
+    "low_density": [
+      "00495359-1d04dd8a.jpg",
+      "043033cb-944610df.jpg",
+      "060b8e4f-d05f9e18.jpg",
+      "0fa9214d-857fb009.jpg",
+      "1077c6d0-3b4e3931.jpg"
+    ],
+    "high_density": [
+      "a554178d-522999d5.jpg",
+      "9f813b6a-18e666e2.jpg",
+      "9936664c-8f82bb48.jpg",
+      "3bd6b5a8-8c096efb.jpg",
+      "7a9d6ddb-f6db12be.jpg"
+    ]
+  },
+  "3_bbox_size_extremes": {
+    "smallest_boxes": [
+      "137460d7-d99eba62.jpg",
+      "34bf1a6f-7fac2681.jpg",
+      "286538be-dc6003b1.jpg",
+      "2777ef21-c83650a4.jpg",
+      "6fa3dece-8ee07755.jpg"
+    ],
+    "largest_boxes": [
+      "4efe84c6-93313761.jpg",
+      "a32543af-6bf413c6.jpg",
+      "2e5a3ced-c7603d0d.jpg",
+      "9fbdb044-02a08068.jpg",
+      "1d33c83b-71e1ea1c.jpg"
+    ]
+  },
+  "4_class_representatives": {
+    "traffic light": "0000f77c-6257be58.jpg",
+    "traffic sign": "0000f77c-6257be58.jpg",
+    "car": "0000f77c-6257be58.jpg",
+    "drivable area": "0000f77c-6257be58.jpg",
+    "lane": "0000f77c-6257be58.jpg",
+    "person": "0000f77c-62c2a288.jpg",
+    "bus": "0001542f-5ce3cf52.jpg",
+    "truck": "00067cfb-5adfaaa7.jpg",
+    "rider": "000f8d37-d4c09a0f.jpg",
+    "bike": "000f8d37-d4c09a0f.jpg"
+  },
+  "5_diversity_samples": [
+    "26be2a92-814a9770.jpg",
+    "2d5aa536-f59d9400.jpg",
+    "2f805c04-a20c2fd6.jpg",
+    "32d199c4-2a0e0e9d.jpg",
+    "432ebb4f-84a729dc.jpg"
+  ],
+  "6_occlusion_samples": [
+    "97431a6b-5338aa8d.jpg",
+    "30db959a-d82f777d.jpg",
+    "5a6cd827-6925b067.jpg",
+    "5a2349c6-0e5d9281.jpg",
+    "a29df436-0acb95d9.jpg"
+  ],
+  "7_cooccurrence_patterns": [
+    {
+      "pair": [
+        "car",
+        "drivable area"
+      ],
+      "count": 66070
+    },
+    {
+      "pair": [
+        "car",
+        "lane"
+      ],
+      "count": 65788
+    },
+    {
+      "pair": [
+        "drivable area",
+        "lane"
+      ],
+      "count": 64123
+    },
+    {
+      "pair": [
+        "car",
+        "traffic sign"
+      ],
+      "count": 56453
+    },
+    {
+      "pair": [
+        "lane",
+        "traffic sign"
+      ],
+      "count": 55095
+    },
+    {
+      "pair": [
+        "drivable area",
+        "traffic sign"
+      ],
+      "count": 54744
+    },
+    {
+      "pair": [
+        "car",
+        "traffic light"
+      ],
+      "count": 38835
+    },
+    {
+      "pair": [
+        "lane",
+        "traffic light"
+      ],
+      "count": 37892
+    },
+    {
+      "pair": [
+        "drivable area",
+        "traffic light"
+      ],
+      "count": 37192
+    },
+    {
+      "pair": [
+        "traffic light",
+        "traffic sign"
+      ],
+      "count": 34583
+    },
+    {
+      "pair": [
+        "car",
+        "person"
+      ],
+      "count": 21844
+    },
+    {
+      "pair": [
+        "lane",
+        "person"
+      ],
+      "count": 21420
+    }
+  ],
+  "meta": {
+    "Last Computed": "2025-11-10 00:34:13",
+    "cache_status": "hit"
+  }
+}

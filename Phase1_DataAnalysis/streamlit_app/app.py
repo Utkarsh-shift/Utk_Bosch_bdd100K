@@ -3386,7 +3386,7 @@ elif selected == "Sample Visualizations":
     """, unsafe_allow_html=True)
 
     # =====================================================
-    # 🖼️ Display 2 Images per Category
+    #  Display 2 Images per Category
     # =====================================================
     for title, folder in sample_categories.items():
         folder_path = os.path.join(BASE_SAMPLE_DIR, folder)

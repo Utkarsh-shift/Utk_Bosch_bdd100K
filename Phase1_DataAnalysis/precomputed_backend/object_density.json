@@ -1,3 +1,58 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:54c0d4f3bdb96a2c00b622fc034e99be36e67ef82368a6761cc24ada37fbc723
-size 1596
+{
+  "train": {
+    "subset": "train",
+    "total_images": 5000,
+    "total_objects": 139620,
+    "objects_per_image_mean": 27.924,
+    "objects_per_image_std": 12.7616074222646,
+    "objects_per_image_histogram": [115, 299, 650, 689, 652, 790, 498, 457, 248, 209, 158, 88, 64, 34, 18, 18, 2, 7, 2, 2],
+    "per_class_density": {
+      "traffic light": 2.6724,
+      "traffic sign": 3.4382,
+      "car": 10.2776,
+      "drivable area": 1.8122,
+      "lane": 7.6304,
+      "person": 1.277,
+      "bus": 0.1672,
+      "truck": 0.4352,
+      "rider": 0.0642,
+      "bike": 0.1054,
+      "motor": 0.0418,
+      "train": 0.0024
+    },
+    "meta": {
+      "Last Computed": "2025-11-12 20:15:16",
+      "cache_status": "miss"
+    }
+  },
+  "val": {
+    "subset": "val",
+    "total_images": 5000,
+    "total_objects": 139923,
+    "objects_per_image_mean": 27.9846,
+    "objects_per_image_std": 12.6970848166026,
+    "objects_per_image_histogram": [102, 312, 495, 648, 669, 641, 694, 426, 298, 229, 161, 125, 77, 53, 24, 19, 7, 12, 4, 4],
+    "per_class_density": {
+      "traffic sign": 3.5064,
+      "traffic light": 2.7488,
+      "car": 10.24,
+      "rider": 0.0672,
+      "motor": 0.048,
+      "drivable area": 1.7736,
+      "lane": 7.4974,
+      "person": 1.4138,
+      "bus": 0.1602,
+      "truck": 0.4288,
+      "bike": 0.099,
+      "train": 0.0014
+    },
+    "meta": {
+      "Last Computed": "2025-11-12 20:18:00",
+      "cache_status": "miss"
+    }
+  },
+  "meta": {
+    "Last Computed": "2025-11-12 20:22:13",
+    "cache_status": "hit"
+  }
+}

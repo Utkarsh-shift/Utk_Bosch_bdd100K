@@ -1,3 +1,47 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:26a5ef8b2876399b0efd9a7fdb1345df25ca140da7f65b7320cb95856c801fcb
-size 750
+{
+  "subset": "train",
+  "total_images": 5000,
+  "total_objects": 139620,
+  "objects_per_image_mean": 27.924,
+  "objects_per_image_std": 12.761607422264643,
+  "objects_per_image_histogram": [
+    115,
+    299,
+    650,
+    689,
+    652,
+    790,
+    498,
+    457,
+    248,
+    209,
+    158,
+    88,
+    64,
+    34,
+    18,
+    18,
+    2,
+    7,
+    2,
+    2
+  ],
+  "per_class_density": {
+    "traffic light": 2.6724,
+    "traffic sign": 3.4382,
+    "car": 10.2776,
+    "drivable area": 1.8122,
+    "lane": 7.6304,
+    "person": 1.277,
+    "bus": 0.1672,
+    "truck": 0.4352,
+    "rider": 0.0642,
+    "bike": 0.1054,
+    "motor": 0.0418,
+    "train": 0.0024
+  },
+  "meta": {
+    "Last Computed": "2025-11-12 20:15:16",
+    "cache_status": "miss"
+  }
+}
