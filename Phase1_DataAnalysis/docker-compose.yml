@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: bdd_backend
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ${DATASET_PATH}/bdd100k_labels_release:/app/data/bdd100k/bdd100k_labels_release
+      - ${DATASET_PATH}/bdd100k_images_100k:/app/data/bdd100k/bdd100k_images_100k
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: bdd_frontend
+    command: streamlit run streamlit_app/app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+      - ${DATASET_PATH}/bdd100k_labels_release:/app/data/bdd100k/bdd100k_labels_release
+      - ${DATASET_PATH}/bdd100k_images_100k:/app/data/bdd100k/bdd100k_images_100k
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    restart: unless-stopped

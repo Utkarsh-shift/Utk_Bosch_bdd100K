@@ -1,0 +1,137 @@
+# ============================================================
+# 🧹 .gitignore — Utk_Bosch_bdd100K Project
+# Author: Utkarsh
+# Description: Ignore unnecessary files for clean version control
+# ============================================================
+
+# ===============================
+# 🐍 Python
+# ===============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.eggs/
+*.manifest
+*.spec
+*.db
+*.sqlite3
+
+# ===============================
+# 🧱 Django
+# ===============================
+*.log
+*.pot
+*.pyc
+*.mo
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+static/
+.env
+.env.*
+celerybeat-schedule
+celerybeat.pid
+
+# ===============================
+# 📊 Streamlit
+# ===============================
+.streamlit/
+.streamlit_cache/
+.streamlit_app/__pycache__/
+.streamlit_app/utils/__pycache__/
+# Streamlit temp files
+**/.streamlit/
+
+# ===============================
+# 🧰 Virtual Environments
+# ===============================
+venv/
+env/
+ENV/
+backendbdd/
+.venv/
+.env.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ===============================
+# 🐳 Docker
+# ===============================
+*.pid
+*.log
+docker-compose.override.yml
+docker-compose.debug.yml
+**/Dockerfile.*
+!Dockerfile.backend
+!Dockerfile.frontend
+**/docker-compose.yml
+.dockerignore
+
+# ===============================
+# 🧩 IDE & Editor Settings
+# ===============================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.bak
+*.tmp
+
+# ===============================
+# 📦 System Files
+# ===============================
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+*.tmp
+*.lock
+
+# ===============================
+# 🧮 Notebooks and Cache
+# ===============================
+*.ipynb_checkpoints/
+.ipynb_checkpoints/
+*.checkpoint.ipynb
+__MACOSX/
+
+# ===============================
+# 📂 Project Specific
+# ===============================
+# Large BDD100K dataset files
+Data/
+data/
+assignment_data_bdd/
+bdd100k_images_100k/
+bdd100k_labels_release/
+*.zip
+*.tar
+*.tar.gz
+
+# Logs and metrics
+logs/
+log/
+*.csv
+*.json
+*.pkl
+*.npy
+*.npz
+
+
+Phase1_DataAnalysis/runtime_cache/
+Phase1_DataAnalysis/output_samples/
+# ===============================
+# ✅ Allow list (keep required configs)
+# ===============================
+!.env.example
+!docker-compose.yml
+!requirements.txt
+!README.md
+!Phase*/**

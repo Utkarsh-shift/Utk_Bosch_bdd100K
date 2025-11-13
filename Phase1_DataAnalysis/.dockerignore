@@ -1,0 +1,80 @@
+# ============================================================
+# 🐳 .dockerignore — Utk_Bosch_bdd100K Project
+# Author: Utkarsh
+# Description: Exclude unnecessary files from Docker build context
+# ============================================================
+
+# ===============================
+# 🧱 Python / Django
+# ===============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.pot
+*.mo
+local_settings.py
+celerybeat-schedule
+celerybeat.pid
+
+# ===============================
+# 🧰 Environments
+# ===============================
+venv/
+env/
+.venv/
+backendbdd/
+ENV/
+*.env
+.env.*
+runtime_cache/
+output_samples/
+
+# ===============================
+# 🧮 Build / Artifacts
+# ===============================
+build/
+dist/
+*.egg-info/
+*.tar
+*.gz
+*.zip
+*.whl
+
+# ===============================
+# 📦 Dataset / Large Files
+# ===============================
+Data/
+data/
+assignment_data_bdd/
+bdd100k_images_100k/
+bdd100k_labels_release/
+*.csv
+*.json
+*.npy
+*.npz
+*.pkl
+*.pt
+*.onnx
+
+# ===============================
+# 🖥️ Streamlit Cache
+# ===============================
+.streamlit/
+.streamlit_cache/
+
+# ===============================
+# 🧩 IDE / System Files
+# ===============================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+*.tmp
+*.lock

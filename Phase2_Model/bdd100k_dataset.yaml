@@ -1,0 +1,15 @@
+names:
+- bike
+- bus
+- car
+- motor
+- person
+- rider
+- traffic light
+- traffic sign
+- train
+- truck
+nc: 10
+path: /workspace/bdd100k_yolov8m_subset
+train: images/train
+val: images/val

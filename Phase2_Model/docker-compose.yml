@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  bdd_model:
+    build: .
+    container_name: bdd_model_dev
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+      - ./checkpoints:/app/checkpoints
+    environment:
+      - PYTHONUNBUFFERED=1
+    working_dir: /app
+

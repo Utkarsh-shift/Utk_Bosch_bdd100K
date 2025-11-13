@@ -1,0 +1,48 @@
+# =======================================================
+# YOLOv8m Custom Training Config for BDD100K
+# =======================================================
+
+# ---- DATA PATHS ----
+paths:
+  data_root: "/workspace/bdd100k_labels_release/bdd100k/labels"
+  images_root: "/workspace/bdd100k_images_100k/bdd100k/images/100k"
+  output_root: "/workspace/bdd100k_yolov8m"
+  subset_root: "/workspace/bdd100k_yolov8m_subset"
+  checkpoints: "/workspace/checkpoints"
+  logs: "/workspace/logs/yolo_training"
+
+# ---- DATASET SETTINGS ----
+dataset:
+  num_classes: 10
+  class_names:
+    - bike
+    - bus
+    - car
+    - motor
+    - person
+    - rider
+    - traffic light
+    - traffic sign
+    - train
+    - truck
+  sample_size_train: 2000
+  sample_size_val: 400
+
+# ---- TRAINING SETTINGS ----
+training:
+  epochs: 3
+  batch_size: 8
+  img_size: 640
+  lr: 0.0001
+  weight_decay: 0.0001
+  grad_clip_norm: 10.0
+  accum_steps: 4
+  ema_decay: 0.999
+  cosine_eta_min: 1e-6
+
+# ---- HARDWARE ----
+hardware:
+  device: "cuda"
+
+# ---- REPRODUCIBILITY ----
+seed: 42
