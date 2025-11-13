@@ -60,6 +60,7 @@ from pathlib import Path
 def load_config(config_path="./scripts/config.yaml"):
     """Load configuration YAML file."""
     config_path = Path(config_path)
+    print("The config path is:::::::::::::::::", config_path)
     if not config_path.exists():
         raise FileNotFoundError(f"Config file not found: {config_path}")
     with open(config_path, "r") as f:
@@ -95,11 +96,17 @@ for i, cls in enumerate(CLASS_NAMES):
 
 
 # Load paths and training params from config
-DATA_ROOT = Path(CONFIG["paths"]["data_root"])
-IMAGES_ROOT = Path(CONFIG["paths"]["images_root"])
-OUTPUT_ROOT = Path(CONFIG["paths"]["output_root"])
-OUTPUT_SUBSET = Path(CONFIG["paths"]["subset_root"])
+# ---------------------------
+# Resolve config paths relative to project root (ROOT_DIR)
+# ---------------------------
+# ROOT_DIR points to Phase2_Model (scripts/..)/..
+# We resolve relative paths in config to absolute paths here.
+DATA_ROOT = (ROOT_DIR / Path(CONFIG["paths"]["data_root"])).resolve()
+IMAGES_ROOT = (ROOT_DIR / Path(CONFIG["paths"]["images_root"])).resolve()
+OUTPUT_ROOT = (ROOT_DIR / Path(CONFIG["paths"]["output_root"])).resolve()
+OUTPUT_SUBSET = (ROOT_DIR / Path(CONFIG["paths"]["subset_root"])).resolve()
 
+# Training / hardware settings
 DEVICE = CONFIG["hardware"]["device"]
 EPOCHS = CONFIG["training"]["epochs"]
 BATCH_SIZE = CONFIG["training"]["batch_size"]
@@ -109,6 +116,7 @@ CLASS_NAMES = CONFIG["dataset"]["class_names"]
 NUM_CLASSES = CONFIG["dataset"]["num_classes"]
 
 class_to_idx = {cls: idx for idx, cls in enumerate(CLASS_NAMES)}
+
 
 
 # =====================================================
@@ -201,7 +209,7 @@ def convert_bdd_to_yolo(
     json_path: str,
     output_dir: str,
     split: str = 'train',
-    sample_size: int = 2000 
+    sample_size: int = 2000
 ):
     """
     Convert BDD100K JSON labels to YOLO format (sampled subset).
@@ -210,7 +218,7 @@ def convert_bdd_to_yolo(
         json_path: Path to BDD100K JSON label file
         output_dir: Directory to save YOLO format labels
         split: Dataset split name (train/val)
-        sample_size: Number of samples to randomly convert (default: 2000)
+        sample_size: Number of samples to randomly convert
     """
 
     print(f"\n{'='*70}")
@@ -232,9 +240,9 @@ def convert_bdd_to_yolo(
     print(f"  Total images in original {split}: {total_images}")
 
     # ------------------------------------------------------------
-    # Randomly sample 2000 images (or fewer if dataset smaller)
+    # Random sampling
     # ------------------------------------------------------------
-    random.seed(42)  # for reproducibility
+    random.seed(42)
     sample_size = min(sample_size, total_images)
     sampled_data = random.sample(labels_data, sample_size)
     print(f" Sampling {sample_size} images for conversion.\n")
@@ -248,9 +256,7 @@ def convert_bdd_to_yolo(
 
     for item in tqdm(sampled_data, desc=f"Converting {split} subset"):
         img_name = item['name']
-        attributes = item.get("attributes", {})
-
-        img_width, img_height = 1280, 720
+        img_width, img_height = 1280, 720  # fixed BDD100K resolution
         yolo_lines = []
 
         for label in item.get('labels', []):
@@ -261,32 +267,34 @@ def convert_bdd_to_yolo(
             if category not in class_to_idx:
                 continue
 
-            box2d = label['box2d']
-            x1, y1, x2, y2 = box2d['x1'], box2d['y1'], box2d['x2'], box2d['y2']
+            x1, y1 = label['box2d']['x1'], label['box2d']['y1']
+            x2, y2 = label['box2d']['x2'], label['box2d']['y2']
 
             if x2 <= x1 or y2 <= y1:
                 continue
 
-            # Convert to YOLO format (normalized)
+            # YOLO normalized coords
             x_center = ((x1 + x2) / 2) / img_width
             y_center = ((y1 + y2) / 2) / img_height
             width = (x2 - x1) / img_width
             height = (y2 - y1) / img_height
 
-            # Clip to [0, 1]
+            # Clip
             x_center = max(0, min(1, x_center))
             y_center = max(0, min(1, y_center))
             width = max(0, min(1, width))
             height = max(0, min(1, height))
 
-            class_id = class_to_idx[category]
-            yolo_lines.append(f"{class_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}")
+            cls_id = class_to_idx[category]
+            yolo_lines.append(
+                f"{cls_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}"
+            )
             total_boxes += 1
 
-        # Save label file
+        # Save
         if yolo_lines:
-            txt_name = Path(img_name).stem + ".txt"
-            with open(output_path / txt_name, "w") as f:
+            txt_file = output_path / f"{Path(img_name).stem}.txt"
+            with open(txt_file, "w") as f:
                 f.write("\n".join(yolo_lines))
             converted_count += 1
         else:
@@ -305,35 +313,7 @@ def convert_bdd_to_yolo(
     print(f"  → Avg Boxes per Image      : {total_boxes / max(converted_count, 1):.2f}")
     print(f"{'='*70}\n")
 
-    print("\n Running BDD100K JSON → YOLO conversion...\n")
-
-    train_json = data_root / "bdd100k_labels_release" / "bdd100k" / "labels" / "bdd100k_labels_images_train.json"
-    val_json = data_root / "bdd100k_labels_release" / "bdd100k" / "labels" / "bdd100k_labels_images_val.json"
-
-    train_output = output_root / "labels" / "train"
-    val_output = output_root / "labels" / "val"
-
-    print(f"   Dataset Structure:")
-    print(f"  ├── Train JSON : {train_json}")
-    print(f"  ├── Val JSON   : {val_json}")
-    print(f"  ├── Train Out  : {train_output}")
-    print(f"  └── Val Out    : {val_output}\n")
-
-    # Train split
-    if train_json.exists():
-        convert_bdd_to_yolo(train_json, train_output, split="train")
-    else:
-        print(f"[WARN] Train JSON not found: {train_json}")
-
-    # Val split
-    if val_json.exists():
-        convert_bdd_to_yolo(val_json, val_output, split="val")
-    else:
-        print(f"[WARN] Val JSON not found: {val_json}")
-
-    print("\n Conversion completed successfully!")
-    print(f"YOLO labels available under: {output_root}/labels/\n")
-
+    print(f" YOLO labels written to: {output_path}\n")
 
 
 # =======================================================
@@ -498,7 +478,9 @@ def create_yolo_subset(
 
     # Define directories
     src_img_dir = images_root / split
+    print("The source image directory is:::::::::::::::", src_img_dir)
     src_lbl_dir = labels_root / split
+    print("The source label directory is:::::::::::::::", src_lbl_dir)
     dst_img_dir = output_root / "images" / split
     dst_lbl_dir = output_root / "labels" / split
     dst_img_dir.mkdir(parents=True, exist_ok=True)
@@ -562,23 +544,38 @@ def run_subset_creation():
     """
     print("\n STEP 2: Creating YOLO subset...\n")
 
-    # Define your key paths
-    DATA_ROOT = Path("/workspace")
-    OUTPUT_YOLO = DATA_ROOT / "bdd100k_yolov8m"              # Full YOLO output from conversion
-    OUTPUT_SUBSET = DATA_ROOT / "bdd100k_yolov8m_subset"     # New subset output
+    # Phase2 root
+    PHASE2 = ROOT_DIR
 
-    # Define input roots
+    # Dataset root (Data/assignment_data_bdd inside repo root)
+    DATA_ROOT = (PHASE2 / ".." / "Data" / "assignment_data_bdd").resolve()
+    print("DATA_ROOT =", DATA_ROOT)
+
+    # Full YOLO output produced by conversion (inside Phase2)
+    OUTPUT_YOLO = PHASE2 / "bdd100k_yolo"
+
+    # Subset output (inside Phase2)
+    OUTPUT_SUBSET = PHASE2 / "bdd100k_yolo_subset"
+
+    # Image root (official BDD100K layout inside Data)
     img_root = DATA_ROOT / "bdd100k_images_100k" / "bdd100k" / "images" / "100k"
+
+    # Label root (converted labels)
     lbl_root = OUTPUT_YOLO / "labels"
 
-    # Run subset creation for train and val
+    # sanity prints
+    print(f" Images root: {img_root}")
+    print(f" Labels root: {lbl_root}")
+    print(f" Subset output: {OUTPUT_SUBSET}\n")
+
+    # Create train and val subsets
     create_yolo_subset(
         images_root=img_root,
         labels_root=lbl_root,
         output_root=OUTPUT_SUBSET,
         split="train",
-        num_samples=2000,
-        seed=42
+        num_samples=CONFIG["dataset"]["sample_size_train"],
+        seed=CONFIG.get("seed", 42)
     )
 
     create_yolo_subset(
@@ -586,14 +583,13 @@ def run_subset_creation():
         labels_root=lbl_root,
         output_root=OUTPUT_SUBSET,
         split="val",
-        num_samples=400,
-        seed=42
+        num_samples=CONFIG["dataset"]["sample_size_val"],
+        seed=CONFIG.get("seed", 42)
     )
 
-    print(" Subset creation complete.")
-    print(f" Subset stored at: {OUTPUT_SUBSET}")
+    print("Subset creation complete.")
+    print(f"Subset stored at: {OUTPUT_SUBSET}")
     print("=" * 70 + "\n")
-
 
 
 # ============================================================
@@ -713,10 +709,18 @@ def train_with_custom_dataloader():
     # ============================================
     # 1️ Paths & Config
     # ============================================
-    dataset_root = Path(CONFIG["paths"]["subset_root"])
+       # dataset_root expected relative in config; resolve against ROOT_DIR
+    dataset_root = (ROOT_DIR / Path(CONFIG["paths"]["subset_root"])).resolve()
+   
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    os.makedirs(CONFIG["paths"]["checkpoints"], exist_ok=True)
-    writer = SummaryWriter(CONFIG["paths"]["logs"])
+
+    # Ensure checkpoints/logs paths are resolved and created
+    checkpoints_dir = (ROOT_DIR / Path(CONFIG["paths"]["checkpoints"])).resolve()
+    logs_dir = (ROOT_DIR / Path(CONFIG["paths"]["logs"])).resolve()
+    os.makedirs(checkpoints_dir, exist_ok=True)
+    os.makedirs(logs_dir, exist_ok=True)
+
+    writer = SummaryWriter(logs_dir.as_posix())
 
     num_epochs = CONFIG["training"]["epochs"]
     base_lr = CONFIG["training"]["lr"]
@@ -864,14 +868,15 @@ def train_with_custom_dataloader():
         # =============================================
 # Create YOLO Dataset YAML for Validation
 # =============================================
-        dataset_yaml_path = Path(CONFIG["paths"]["checkpoints"]) / "bdd100k_dataset.yaml"
+        dataset_yaml_path = checkpoints_dir / "bdd100k_dataset.yaml"
         dataset_yaml_content = {
-            "path": str(CONFIG["paths"]["subset_root"]),
+            "path": str((ROOT_DIR / Path(CONFIG['paths']['subset_root'])).resolve()),
             "train": "images/train",
             "val": "images/val",
             "nc": len(CONFIG["dataset"]["class_names"]),
             "names": CONFIG["dataset"]["class_names"]
         }
+
         import yaml
         with open(dataset_yaml_path, "w") as f:
             yaml.dump(dataset_yaml_content, f)
@@ -907,7 +912,8 @@ def train_with_custom_dataloader():
     # ============================================
     # 5 Save Final Model
     # ============================================
-    final_path = Path(CONFIG["paths"]["checkpoints"]) / "yolov8m_adapter_final.pt"
+    final_path = checkpoints_dir / "yolov8m_adapter_final.pt"
+
     torch.save(wrapped.state_dict(), final_path)
     print(f"\n Final model saved → {final_path}")
 
@@ -1020,7 +1026,8 @@ if __name__ == "__main__":
     run_subset_creation()
 
     print("\n YOLOv8m conversion, verification, and subset creation complete!")
-    print(f"Subset ready at: /workspace/bdd100k_yolov8m_subset")
+    print(f"Subset ready at: {(ROOT_DIR / Path(CONFIG['paths']['subset_root'])).resolve()}")
+
     print("\nNext steps:")
     train_with_custom_dataloader()
 

@@ -2,16 +2,18 @@
 # YOLOv8m Custom Training Config for BDD100K
 # =======================================================
 
-# ---- DATA PATHS ----
 paths:
-  data_root: "/workspace/bdd100k_labels_release/bdd100k/labels"
-  images_root: "/workspace/bdd100k_images_100k/bdd100k/images/100k"
-  output_root: "/workspace/bdd100k_yolov8m"
-  subset_root: "/workspace/bdd100k_yolov8m_subset"
-  checkpoints: "/workspace/checkpoints"
-  logs: "/workspace/logs/yolo_training"
+  data_root: "../../Data/assignment_data_bdd/bdd100k_labels_release/bdd100k/labels"
+  images_root: "../../Data/assignment_data_bdd/bdd100k_images_100k/bdd100k/images/100k"
 
-# ---- DATASET SETTINGS ----
+  # FIXED OUTPUT TARGETS
+  output_root: "./bdd100k_yolo"            # OUTPUT OF JSON → YOLO CONVERSION
+  subset_root: "./bdd100k_yolo_subset"      # OUTPUT OF SUBSET CREATION
+
+  # CHECKPOINTS AND LOGS
+  checkpoints: "./checkpoints"
+  logs: "./logs/yolo_training"
+
 dataset:
   num_classes: 10
   class_names:
@@ -28,7 +30,6 @@ dataset:
   sample_size_train: 2000
   sample_size_val: 400
 
-# ---- TRAINING SETTINGS ----
 training:
   epochs: 3
   batch_size: 8
@@ -40,9 +41,7 @@ training:
   ema_decay: 0.999
   cosine_eta_min: 1e-6
 
-# ---- HARDWARE ----
 hardware:
   device: "cuda"
 
-# ---- REPRODUCIBILITY ----
 seed: 42

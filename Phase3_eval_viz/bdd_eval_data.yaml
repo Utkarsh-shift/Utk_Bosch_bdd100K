@@ -1,0 +1,14 @@
+path: /workspace/Utk_Bosch_bdd100K/Data/assignment_data_bdd/bdd100k_images_100k/bdd100k
+train: images/100k/train
+val: images/100k/val
+names:
+  0: person
+  1: rider
+  2: car
+  3: bus
+  4: truck
+  5: traffic light
+  6: traffic sign
+  7: train
+  8: motor
+  9: bicycle

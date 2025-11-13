@@ -10,6 +10,6 @@ names:
 - train
 - truck
 nc: 10
-path: /workspace/bdd100k_yolov8m_subset
+path: ./bdd100k_yolo_subset
 train: images/train
 val: images/val

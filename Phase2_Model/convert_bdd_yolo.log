@@ -1,0 +1,88 @@
+
+ Using dataset structure:
+  Train JSON : /workspace/Utk_Bosh_bdd100K/Data/assignment_data_bdd/bdd100k_labels_release/bdd100k/labels/bdd100k_labels_images_train.json
+  Val JSON   : /workspace/Utk_Bosh_bdd100K/Data/assignment_data_bdd/bdd100k_labels_release/bdd100k/labels/bdd100k_labels_images_val.json
+  Train imgs : /workspace/Utk_Bosh_bdd100K/Data/assignment_data_bdd/bdd100k_images_100k/bdd100k/images/100k/train
+  Val imgs   : /workspace/Utk_Bosh_bdd100K/Data/assignment_data_bdd/bdd100k_images_100k/bdd100k/images/100k/val
+  Output dir : /workspace/Utk_Bosh_bdd100K/Phase2_Model/bdd100k_yolo
+
+
+======================================================================
+ Converting BDD100K train labels to YOLO format
+======================================================================
+
+Loading JSON annotations from: /workspace/Utk_Bosh_bdd100K/Data/assignment_data_bdd/bdd100k_labels_release/bdd100k/labels/bdd100k_labels_images_train.json
+Total images found: 69863
+Saving YOLO labels to: /workspace/Utk_Bosh_bdd100K/Phase2_Model/bdd100k_yolo/labels/train
+
+
+Converting train:   0%|          | 0/69863 [00:00<?, ?it/s]
+Image: 0000f77c-6257be58.jpg
+  → Weather: clear
+  → Scene: city street
+  → Time of Day: daytime
+    Detected: traffic light
+      occluded: False
+      truncated: False
+      trafficLightColor: green
+      box2d: (1125.90, 133.18, 1156.98, 210.88)
+    Detected: traffic light
+      occluded: False
+      truncated: False
+      trafficLightColor: green
+      box2d: (1156.98, 136.64, 1191.51, 210.88)
+    Detected: traffic sign
+      occluded: False
+      truncated: False
+      trafficLightColor: none
+      box2d: (1101.73, 211.12, 1170.79, 233.57)
+    Detected: traffic sign
+      occluded: False
+      truncated: True
+      trafficLightColor: none
+      box2d: (0.00, 0.25, 100.38, 122.83)
+    Detected: car
+      occluded: False
+      truncated: False
+      trafficLightColor: none
+      box2d: (45.24, 254.53, 357.81, 487.91)
+    Detected: car
+      occluded: False
+      truncated: False
+      trafficLightColor: none
+      box2d: (507.83, 221.73, 908.37, 442.72)
+    Detected: traffic sign
+      occluded: False
+      truncated: True
+      trafficLightColor: none
+      box2d: (0.16, 0.81, 102.42, 133.41)
+
+      trafficLightColor: none
+      box2d: (583.95, 384.31, 611.40, 431.72)
+    Detected: person
+      occluded: False
+      truncated: False
+      trafficLightColor: none
+      box2d: (405.52, 408.02, 415.50, 429.23)
+    Detected: traffic sign
+      occluded: False
+      truncated: False
+      trafficLightColor: none
+      box2d: (366.84, 386.80, 378.07, 401.78)
+
+======================================================================
+ Conversion Summary:
+  → Split: val
+  → Converted images: 10000
+  → Skipped (no valid annotations): 0
+  → Total bounding boxes: 185526
+  → Average boxes per image: 18.55
+======================================================================
+
+
+ All conversions completed successfully!
+YOLO labels saved under: /workspace/Utk_Bosh_bdd100K/Phase2_Model/bdd100k_yolo/labels/
+
+Next steps:
+  1️ Update configs/bdd100k.yaml with correct paths
+  2️ Run training: python models/yolov8_custom_train.py

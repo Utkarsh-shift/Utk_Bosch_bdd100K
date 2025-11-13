@@ -74,7 +74,12 @@ def train_yolo_builtin(cfg):
     model = YOLO(weights)
 
     # Select device
-    device = cfg["hardware"].get("device", "cuda" if torch.cuda.is_available() else "cpu")
+    requested_device = cfg["hardware"].get("device", "cuda")
+    if requested_device == "cuda" and not torch.cuda.is_available():
+        print("\n[WARNING] CUDA requested but NOT available. Falling back to CPU.\n")
+        device = "cpu"
+    else:
+        device = requested_device
 
     # Create project/checkpoint dirs
     project_dir = Path(cfg["paths"]["output_root"])
@@ -139,7 +144,12 @@ def validate_yolo_model(cfg, model_path=None):
     print("===================================================\n")
 
     model = YOLO(model_path)
-    device = cfg["hardware"].get("device", "cuda" if torch.cuda.is_available() else "cpu")
+    requested_device = cfg["hardware"].get("device", "cuda")
+    if requested_device == "cuda" and not torch.cuda.is_available():
+        print("\n[WARNING] CUDA requested but NOT available. Falling back to CPU.\n")
+        device = "cpu"
+    else:
+     device = requested_device
 
     results = model.val(
         data=str(dataset_yaml),
@@ -182,6 +192,7 @@ if __name__ == "__main__":
     if args.validate_only:
         validate_yolo_model(cfg, args.model_path)
     else:
-        model, dataset_yaml = train_yolo_builtin(cfg)
+        results = train_yolo_builtin(cfg)
+
         # Run validation on the trained model
-        validate_yolo_model(cfg, model_path=model.ckpt_path if hasattr(model, "ckpt_path") else None)
+        validate_yolo_model(cfg, args.model_path)

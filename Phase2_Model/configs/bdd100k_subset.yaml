@@ -4,12 +4,13 @@
 
 # ---- DATA PATHS ----
 paths:
-  data_root: "/workspace/bdd100k_labels_release/bdd100k/labels"
-  images_root: "/workspace/bdd100k_images_100k/bdd100k/images/100k"
-  output_root: "/workspace/bdd100k_yolov8m"
-  subset_root: "/workspace/bdd100k_yolov8m_subset"
-  checkpoints: "/workspace/checkpoints"
-  logs: "/workspace/logs/yolo_training"
+  data_root: "../../Data/assignment_data_bdd/bdd100k_labels_release/bdd100k/labels"
+  images_root: "../../Data/assignment_data_bdd/bdd100k_images_100k/bdd100k/images/100k"
+  output_root: "../bdd100k_yolov8m"
+  subset_root: "../bdd100k_yolov8m_subset"
+  checkpoints: "../checkpoints"
+  logs: "../logs/yolo_training"
+
 
 # ---- DATASET SETTINGS ----
 dataset:

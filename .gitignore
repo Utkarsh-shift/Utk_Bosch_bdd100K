@@ -1,11 +1,9 @@
 # ============================================================
-# 🧹 .gitignore — Utk_Bosch_bdd100K Project
-# Author: Utkarsh
-# Description: Ignore unnecessary files for clean version control
+#  .gitignore — Utk_Bosch_bdd100K (KEEP LOGS + RESULTS + runtime_cache)
 # ============================================================
 
 # ===============================
-# 🐍 Python
+#  Python
 # ===============================
 __pycache__/
 *.py[cod]
@@ -13,125 +11,106 @@ __pycache__/
 *.pyo
 *.pyd
 *.so
-*.egg
-*.egg-info/
-.eggs/
-*.manifest
-*.spec
-*.db
-*.sqlite3
 
 # ===============================
-# 🧱 Django
+#  Django & Streamlit
 # ===============================
-*.log
-*.pot
-*.pyc
-*.mo
-local_settings.py
 db.sqlite3
-media/
-staticfiles/
-static/
 .env
 .env.*
-celerybeat-schedule
-celerybeat.pid
 
-# ===============================
-# 📊 Streamlit
-# ===============================
+media/
+static/
+staticfiles/
+
 .streamlit/
-.streamlit_cache/
-.streamlit_app/__pycache__/
-.streamlit_app/utils/__pycache__/
-# Streamlit temp files
-**/.streamlit/
+.streamlit_app/**/__pycache__/
 
 # ===============================
-# 🧰 Virtual Environments
+#  Virtual Environments
 # ===============================
 venv/
+.venv/
 env/
 ENV/
-backendbdd/
-.venv/
-.env.bak/
-pip-log.txt
-pip-delete-this-directory.txt
 
 # ===============================
-# 🐳 Docker
+#  Docker
 # ===============================
-*.pid
-*.log
 docker-compose.override.yml
 docker-compose.debug.yml
 **/Dockerfile.*
-!Dockerfile.backend
-!Dockerfile.frontend
-**/docker-compose.yml
-.dockerignore
+!Dockerfile
 
 # ===============================
-# 🧩 IDE & Editor Settings
+#  IDE / Editor / System Files
 # ===============================
 .vscode/
 .idea/
-*.sublime-project
-*.sublime-workspace
 *.swp
-*.bak
 *.tmp
-
-# ===============================
-# 📦 System Files
-# ===============================
+*.bak
 .DS_Store
 Thumbs.db
-desktop.ini
-~$*
-*.tmp
-*.lock
 
 # ===============================
-# 🧮 Notebooks and Cache
+#  DATASETS (not tracked)
 # ===============================
-*.ipynb_checkpoints/
-.ipynb_checkpoints/
-*.checkpoint.ipynb
-__MACOSX/
-
-# ===============================
-# 📂 Project Specific
-# ===============================
-# Large BDD100K dataset files
 Data/
 data/
 assignment_data_bdd/
-bdd100k_images_100k/
+bdd100k*/
 bdd100k_labels_release/
-*.zip
-*.tar
-*.tar.gz
-
-# Logs and metrics
-logs/
-log/
-*.csv
-*.json
-*.pkl
-*.npy
-*.npz
-
-
-Phase1_DataAnalysis/runtime_cache/
-Phase1_DataAnalysis/output_samples/
+bdd100k_images_100k/
+gt_labels/
 # ===============================
-# ✅ Allow list (keep required configs)
+#  YOLO SUBSETS (large)
 # ===============================
-!.env.example
-!docker-compose.yml
-!requirements.txt
-!README.md
-!Phase*/**
+Phase2_Model/bdd100k_yolo/
+Phase2_Model/bdd100k_yolo_subset/
+Phase2_Model/checkpoints/
+
+# ==============================
+#  Label and cache files
+# (we EXCLUDE these except runtime_cache)
+# ===============================
+**/labels/
+**/*.cache
+
+# ===============================
+#  Photos/videos (handled by LFS)
+# ===============================
+*.jpg
+*.jpeg
+*.png
+*.mp4
+
+# ALLOW sample images from Phase1
+!Phase1_DataAnalysis/samples/**/*
+
+# ===============================
+#  KEEP runtime_cache (user requested)
+# ===============================
+# DO NOT ignore Phase1_DataAnalysis/runtime_cache/
+# (It contains JSON files needed for cached visualizations)
+
+# ===============================
+#  Logs and metrics — KEEP
+# ===============================
+# We keep them because they go to LFS
+!*.log
+!*.json
+!*.csv
+!*.png
+
+# ===============================
+#  Allowlist — keep important files
+# ===============================
+!*.yaml
+!*.yml
+!*.py
+!*.md
+!Phase*/evaluation/results/**
+!Phase*/**/*.json
+!Phase*/**/*.csv
+!Phase*/**/*.png

@@ -98,11 +98,12 @@ def create_yolo_subset(
     missing = 0
 
     print(" Copying image-label pairs...\n")
-    for img_path in subset_images:
+    for img_path in subset_images:  
+        # print(" Processing:", img_path)
         label_path = src_lbl_dir / f"{img_path.stem}.txt"
-
+        # print(" Corresponding label:", label_path)
         if not label_path.exists():
-            print(f" Skipping {img_path.name} (no matching label found)")
+            # print(f" Skipping {img_path.name} (no matching label found)")
             missing += 1
             continue
 
@@ -138,21 +139,22 @@ def main() -> None:
     parser.add_argument(
         "--images-root",
         type=str,
-        default="/bdd_model/bdd100k_images_100k/bdd100k/images/100k",
-        help="Path to original BDD100K images directory."
+        default="../../Data/assignment_data_bdd/bdd100k_images_100k/bdd100k/images/100k",
     )
+
     parser.add_argument(
         "--labels-root",
         type=str,
-        default="/bdd_model/bdd100k_yolo/labels",
-        help="Path to YOLO-format labels directory."
+        default="../bdd100k_yolo/labels",
     )
+
     parser.add_argument(
         "--output-root",
         type=str,
-        default="/bdd_model/bdd100k_yolo_subset",
-        help="Path where subset will be saved."
+        default="../bdd100k_yolo_subset",
     )
+
+    
     parser.add_argument(
         "--split",
         type=str,
@@ -169,7 +171,7 @@ def main() -> None:
     parser.add_argument(
         "--seed",
         type=int,
-        default=42,
+        default=144,
         help="Random seed for reproducibility."
     )
 

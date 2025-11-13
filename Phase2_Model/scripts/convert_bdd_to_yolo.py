@@ -191,13 +191,13 @@ def main():
     parser.add_argument(
         "--data-root",
         type=str,
-        default="/app/data/bdd100k",  # base dataset directory inside Docker
+        default="../../Data/assignment_data_bdd",  # base dataset directory inside Docker
         help="Root directory containing BDD100K dataset",
     )
     parser.add_argument(
         "--output-root",
         type=str,
-        default="/app/data/bdd100k_yolo",  # output directory for YOLO-format labels
+        default="../bdd100k_yolo",  # output directory for YOLO-format labels
         help="Root directory for YOLO-format labels",
     )
     args = parser.parse_args()
