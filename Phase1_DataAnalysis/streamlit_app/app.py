@@ -69,7 +69,7 @@ st.markdown("""
    ===================================== */
 
 /* ==========================================================
-   🖤 Dark Theme Background with Gradient + Video Compatibility
+    Dark Theme Background with Gradient + Video Compatibility
    ========================================================== */
 [data-testid="stAppViewContainer"] {
     /* Core dark gradient background (keeps dark mode aesthetic) */
@@ -141,7 +141,7 @@ st.markdown("""
 
 
 /* ==========================================================
-   🔲 Transparent Overlay for Readability (Dark Mode Enhanced)
+    Transparent Overlay for Readability (Dark Mode Enhanced)
    ========================================================== */
 [data-testid="stAppViewContainer"]::before {
     content: "";
@@ -162,7 +162,7 @@ st.markdown("""
 }
 
 /* ==========================================================
-   🔘 Modern Glassy Gradient Buttons
+    Modern Glassy Gradient Buttons
    ========================================================== */
 div.stButton > button {
     background: linear-gradient(90deg, #6366f1, #8b5cf6);
@@ -206,7 +206,7 @@ div.stButton > button:disabled {
 
 
 /* ==========================================================
-   🪟 Glassmorphic Main Content Blocks — Dark Theme Edition
+    Glassmorphic Main Content Blocks — Dark Theme Edition
    ========================================================== */
 .block-container {
     position: relative;
@@ -943,14 +943,79 @@ if selected == "Home":
     }
     </style>
 
-    <div class='dataset-description'>
-        The BDD100K dataset contains <b>100,000 driving videos</b> — each roughly 40 seconds long, 
-        recorded in <b>720p at 30 fps</b>. Each sequence includes <b>GPS and IMU sensor data</b> for spatial tracking. 
-        The collection spans <b>diverse U.S. locations</b>, covering <b>varied weather conditions</b> 
-        (sunny, overcast, rainy) and <b>different times of day</b> (day and night). 
-        This diversity makes BDD100K one of the <b>most comprehensive datasets</b> available 
-        for computer vision and autonomous driving research.
-    </div>
+ <div class='dataset-description'>
+
+  <!-- Section 1: Annotation Richness -->
+  <h4 style="font-family:Montserrat; color:#e0e7ff; margin-bottom:0.4rem;">
+    1. Rich Multi-Task Annotations
+  </h4>
+  <p>
+    Beyond scale, BDD100K is distinguished by its <b>multi-task annotation depth</b>. 
+    Each video includes <b>frame-level labels</b> for several core perception tasks—
+    <b>object detection</b>, <b>semantic segmentation</b>, <b>lane marking detection</b>, 
+    <b>drivable area estimation</b>, and <b>multi-object tracking</b>. 
+    A curated subset also provides <b>instance segmentation</b> and <b>MOTS</b> annotations, 
+    enabling unified research across both image-level and sequence-level understanding.
+  </p>
+
+  <hr style="border:0; height:1px; background:rgba(255,255,255,0.07); margin:14px 0;">
+
+  <!-- Section 2: Geographic Diversity -->
+  <h4 style="font-family:Montserrat; color:#e0e7ff; margin-bottom:0.4rem;">
+    2. Geographic and Environmental Breadth
+  </h4>
+  <p>
+    BDD100K captures driving scenes across multiple U.S. states, spanning <b>urban centers</b>, 
+    <b>highways</b>, <b>suburbs</b>, and <b>rural environments</b>.  
+    This geographic diversity introduces natural variation in architecture, vegetation, 
+    road design, signage, and traffic density—making the dataset ideal for 
+    <b>domain adaptation</b> and <b>cross-city generalization</b> studies.
+  </p>
+
+  <hr style="border:0; height:1px; background:rgba(255,255,255,0.07); margin:14px 0;">
+
+  <!-- Section 3: Photometric & Weather Diversity -->
+  <h4 style="font-family:Montserrat; color:#e0e7ff; margin-bottom:0.4rem;">
+    3. Weather, Lighting & Photometric Variation
+  </h4>
+  <p>
+    The dataset exhibits extensive <b>photometric variability</b>, covering bright daylight, 
+    long-shadow evenings, <b>night-time low light</b>, fog, rain, and overcast conditions. 
+    These natural changes introduce meaningful <b>domain shift</b>, making BDD100K a realistic 
+    benchmark for robustness under <b>weather-induced</b> and <b>illumination-induced</b> challenges.
+  </p>
+
+  <hr style="border:0; height:1px; background:rgba(255,255,255,0.07); margin:14px 0;">
+
+  <!-- Section 4: Long-Tailed Class Distribution -->
+  <h4 style="font-family:Montserrat; color:#e0e7ff; margin-bottom:0.4rem;">
+    4. Long-Tailed Class Distribution
+  </h4>
+  <p>
+    BDD100K naturally follows a <b>long-tailed</b> object distribution: 
+    common classes like <b>car</b> and <b>person</b> appear frequently, while 
+    <b>train</b>, <b>trailer</b>, <b>motorcycle</b>, and <b>rider</b> occur far less often.  
+    This imbalance mirrors real-world driving scenarios and motivates techniques such as 
+    <b>class-balanced sampling</b>, <b>focal loss</b>, and <b>re-weighting</b> to prevent bias 
+    toward high-frequency categories.
+  </p>
+
+  <hr style="border:0; height:1px; background:rgba(255,255,255,0.07); margin:14px 0;">
+
+  <!-- Section 5: Why BDD100K Matters for Research -->
+  <h4 style="font-family:Montserrat; color:#e0e7ff; margin-bottom:0.4rem;">
+    5. Why BDD100K is a Foundational Research Dataset
+  </h4>
+  <p>
+    Its combination of <b>scale</b>, <b>task diversity</b>, and <b>visual variability</b> 
+    makes BDD100K one of the most influential datasets for autonomous-driving research. 
+    It supports unified training pipelines where a single model can jointly learn detection, 
+    segmentation, tracking, and high-level scene understanding from a coherent dataset. 
+    This multi-modal richness enables robust, real-world generalization.
+  </p>
+
+</div>
+
     """, unsafe_allow_html=True)
 
 
@@ -1598,50 +1663,150 @@ if selected == "Class Distribution":
 
         # === Summary Section (Animated) ===
         st.markdown("""
-        <div class='summary-box'>
-        <h3>1. Overall Dataset Scale</h3>
-        <ul>
+      
+
+
+
+
+    <style>
+    .summary-box {
+        background: rgba(255,255,255,0.06);
+        padding: 1.4rem 1.6rem;
+        border-radius: 14px;
+        line-height: 1.55;
+        font-family: 'Inter', sans-serif;
+        color: #e5e7eb;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+        border: 1px solid rgba(255,255,255,0.15);
+        animation: fadeInUp 0.8s ease-in-out;
+    }
+    .summary-box h3 {
+        font-family: 'Poppins', sans-serif;
+        color: #93c5fd;
+        margin-top: 1rem;
+        margin-bottom: 0.4rem;
+    }
+    .summary-box table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0.6rem 0;
+    }
+    .summary-box table, .summary-box th, .summary-box td {
+        border: 1px solid rgba(255,255,255,0.15);
+        padding: 6px;
+        text-align: center;
+    }
+    .summary-box th {
+        background: rgba(255,255,255,0.15);
+        color: #f9fafb;
+    }
+    .summary-box ul {
+        margin-left: 1rem;
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    </style>
+
+    <div class='summary-box'>
+
+    <h3>1. Overall Dataset Scale</h3>
+    <ul>
         <li><b>Training set:</b> 69,863 images containing ~1.94M annotated objects.</li>
         <li><b>Validation set:</b> 10,000 images containing ~279K annotated objects.</li>
-        <li>Each image holds on average <b>27–28 objects</b>, reflecting real-world street complexity.</li>
-        </ul>
+        <li>Each image holds on average <b>27–28 objects</b>, reflecting the complexity of real-world traffic scenes.</li>
+    </ul>
 
-        <h3>2. Major Class Distribution</h3>
+    <h3>2. Major Class Distribution</h3>
+    <p>
         <b>Dominant:</b> Car (36–37%) and Lane (27%) dominate, covering ~63% of all annotations.<br>
         <b>Moderate:</b> Drivable area (6%), Person (4.7%).<br>
         <b>Minority:</b> Truck, Bus, Bike, Rider, Motor, Train (<3% combined).<br><br>
-        <b>Interpretation:</b> The dataset exhibits a <i>long-tailed imbalance</i> typical in urban driving scenarios.
+        <b>Interpretation:</b> The dataset exhibits a natural <i>long-tailed imbalance</i> common in urban driving environments.
+    </p>
 
-        <h3>3. Distribution Consistency</h3>
-        <table>
-        <tr><th>Metric</th><th>Train (%)</th><th>Validation (%)</th><th>Difference</th></tr>
+    <h3>3. Distribution Consistency (Train vs Validation)</h3>
+    <table>
+        <tr><th>Class</th><th>Train (%)</th><th>Validation (%)</th><th>Difference</th></tr>
         <tr><td>Car</td><td>36.74</td><td>36.71</td><td>0.03</td></tr>
         <tr><td>Lane</td><td>27.23</td><td>27.12</td><td>0.11</td></tr>
         <tr><td>Traffic Sign</td><td>12.35</td><td>12.50</td><td>-0.15</td></tr>
         <tr><td>Traffic Light</td><td>9.59</td><td>9.63</td><td>-0.04</td></tr>
         <tr><td>Drivable Area</td><td>6.48</td><td>6.44</td><td>0.04</td></tr>
         <tr><td>Person</td><td>4.71</td><td>4.75</td><td>-0.04</td></tr>
-        </table>
-        <i>→ The nearly identical train/val percentages confirm robust data sampling and minimal bias.</i>
+    </table>
+    <i>→ The nearly identical train/val percentages confirm unbiased sampling and excellent dataset consistency.</i>
 
-        <h3>4. Log-Scale Observation</h3>
-        Object frequencies drop from log(5.8) for cars to log(2.1) for trains (~1000× difference).<br>
-        This confirms a <b>long-tail distribution</b> requiring <b>loss reweighting</b> or <b>augmentation</b> for rare classes.
+    <h3>4. Long-Tail Behavior & Frequency Drop</h3>
+    <p>
+        Object frequencies fall from <b>log(5.85)</b> for cars to <b>log(2.13)</b> for trains — a <b>3.7 log-unit drop (~5000× difference)</b>.<br>
+        This is a textbook <b>Zipf/power-law distribution</b>, verified in the BDD100K research paper.<br>
+        <b>Implication:</b> Rare classes (train, rider, motor) need focal loss, class rebalancing, or targeted augmentation.
+    </p>
 
-        <h3>5. Key Insights</h3>
-        <ul>
-        <li>Dominated by <b>vehicular & lane-based classes</b> ideal for perception tasks.</li>
-        <li><b>Human-related entities</b> (Person, Rider, Bike) appear moderately but are safety-critical.</li>
-        <li><b>Minority categories</b> (Train, Bus, Motor) risk underfitting — must use balancing techniques.</li>
-        <li>Class balance consistency ensures strong generalization performance.</li>
-        </ul>
+    <h3>5. Rare Classes Are Safety-Critical</h3>
+    <ul>
+        <li>Rider (0.23%), Motor (0.15%), Train (0.01%) are extremely rare.</li>
+        <li>These appear mostly in <b>safety-critical scenarios</b> like intersections.</li>
+        <li>Low frequency → low recall unless treated with balancing strategies.</li>
+    </ul>
 
-        <h3>Summary</h3>
-        The BDD100K dataset demonstrates a <b>long-tailed, imbalanced pattern</b> dominated by frequent traffic objects.
-        Rare classes reflect real-world distribution challenges, demanding <b>strategic training techniques</b>
-        like focal loss and class reweighting. The near-identical train/val split proves <b>excellent data consistency</b>
-        and reliability for autonomous vision benchmarks.
-        </div>
+    <h3>6. Correlation with Scene Types</h3>
+    <p>Class frequencies correlate with geography and scene-type:</p>
+    <ul>
+        <li><b>Urban</b> → more persons, buses, riders, bikes.</li>
+        <li><b>Highways</b> → more trucks, fewer pedestrians.</li>
+        <li><b>Night</b> → traffic-light visibility dominates.</li>
+    </ul>
+
+    <h3>7. Why Car & Lane Dominate (Sensor Geometry)</h3>
+    <p>
+        BDD100K uses <b>roof-mounted forward-facing cameras</b>:
+    </p>
+    <ul>
+        <li><b>Cars (~37%)</b> consistently appear ahead.</li>
+        <li><b>Lanes (~27%)</b> always visible beneath the camera.</li>
+        <li><b>Traffic signs/lights (~22%)</b> frequently fall in the camera’s field of view.</li>
+    </ul>
+
+    <h3>8. Drivable-Area Underrepresentation (~6%)</h3>
+    <p>
+        Despite its importance, drivable-area forms only ~6% of annotations.<br>
+        Weather, nighttime lighting, and occlusion reduce road visibility — also noted in the BDD100K paper.
+    </p>
+
+    <h3>9. Occlusion & Scale Challenges</h3>
+    <ul>
+        <li>Small classes (bike, rider) suffer from <b>heavy occlusion</b>.</li>
+        <li>They appear at <b>very small scale</b>, increasing detection difficulty.</li>
+        <li>Underrepresentation + small scale = low AP without targeted training.</li>
+    </ul>
+
+    <h3>10. Multi-Task Label Influence</h3>
+    <ul>
+        <li>Lane & drivable-area → dominate segmentation tasks.</li>
+        <li>Vehicles & persons → dominate detection tasks.</li>
+        <li>Thus, long-tail imbalance differs per task — crucial for multi-task learning.</li>
+    </ul>
+
+    <h3>Summary</h3>
+    <p>
+        BDD100K shows a strong <b>long-tailed distribution</b> with excellent train/val consistency.<br>
+        Rare classes are safety-critical and require <b>focal loss</b>, <b>oversampling</b>, and <b>augmentation</b>.<br>
+        The dataset’s scale and diversity make it ideal for robust autonomous driving perception models.
+    </p>
+
+    </div>
+
+
+
+
+
+
+
+
+
         """, unsafe_allow_html=True)
 
     else:
@@ -2449,7 +2614,7 @@ elif selected == "Data Quality per Class":
     sns.set_theme(style="whitegrid", context="talk")
 
     # ===============================================
-    # 🌈 Helper: Glassy Compact Bar Plot
+    #  Helper: Glassy Compact Bar Plot
     # ===============================================
     def compact_plot(df, metric, title, ylabel, color_palette=["#60a5fa", "#a78bfa"]):
         fig, ax = plt.subplots(figsize=(6.2, 3.6), dpi=150)
@@ -3120,7 +3285,8 @@ elif selected == "Class Balance Insights":
     # Load Data (from JSON or API)
     # ==============================
     try:
-        cache_path = os.path.join("precomputed_backend", "class_balance_insghts1.json")
+        cache_path = os.path.join("/app/precomputed_backend", "class_balance_insights.json")
+        print(" Loading class balance insights from cache..." , cache_path , "****((((((()))))))")
         with open(cache_path, "r") as f:
             data = json.load(f)
     except FileNotFoundError:

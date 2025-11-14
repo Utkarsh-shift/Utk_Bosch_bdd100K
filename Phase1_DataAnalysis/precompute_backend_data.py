@@ -15,71 +15,75 @@ from pathlib import Path
 # ============================================================
 # CONFIGURATION
 # ============================================================
-BASE_URL = "http://localhost:8000"  # Django backend base URL
-OUTPUT_DIR = Path("precomputed_backend")
+BASE_URL = "http://localhost:8000"       # Django backend base URL
+OUTPUT_DIR = Path("app/precomputed_backend")
 
+# Mapping of output file names → backend endpoints
 ENDPOINTS = {
-    "dataset_summary": "/api/analysis/dataset-summary/",
+    "class_balance_insights": "/api/analysis/class-balance-insights/",
     "class_distribution": "/api/analysis/class-distribution/",
-    "visual_distributions": "/api/analysis/visual-distributions/",
     "data_quality_per_class": "/api/analysis/data-quality-per-class/",
     "object_density": "/api/analysis/object-density/",
+    "sample_visualization": "/api/analysis/sample-visualizations/",
+    "visual-distributions": "/api/analysis/visual-distributions/",
     "class_balance": "/api/analysis/class-balance/",
-    "class_balance_insights": "/api/analysis/class-balance-insights/",
-    "sample_visualizations": "/api/analysis/sample-visualizations/",
+    "dataset_summary": "/api/analysis/dataset-summary/",
 }
 
 # ============================================================
-#  HANDLE EXISTING FILES — BACKUP FIRST
+#  BACKUP FUNCTION
 # ============================================================
 def backup_existing_files(output_dir: Path):
-    """Move existing files to a timestamped backup folder before overwriting."""
-    if not output_dir.exists() or not any(output_dir.iterdir()):
-        return None  # no existing files to move
+    """Move existing files into a timestamped backup directory."""
+    if not output_dir.exists():
+        return None
+
+    existing_files = list(output_dir.glob("*.json"))
+    if not existing_files:
+        return None
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_dir = output_dir.parent / f"{output_dir.name}_backup_{timestamp}"
-
     backup_dir.mkdir(parents=True, exist_ok=True)
-    print(f"[INFO] Moving old files to: {backup_dir}")
 
-    for file in output_dir.glob("*.json"):
+    print(f"[INFO] Backing up old JSON files to {backup_dir}")
+
+    for file in existing_files:
         shutil.move(str(file), str(backup_dir / file.name))
         print(f"  Moved: {file.name}")
 
     return backup_dir
 
-
 # ============================================================
 #  MAIN SCRIPT
 # ============================================================
 if __name__ == "__main__":
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Step 1️⃣ — Backup old results
+    # Step 1 — Backup old cached files
     backup_existing_files(OUTPUT_DIR)
 
-    # Step 2️⃣ — Fetch and save new API responses
-    for name, endpoint in ENDPOINTS.items():
+    # Step 2 — Fetch fresh API responses
+    for file_key, endpoint in ENDPOINTS.items():
         url = f"{BASE_URL}{endpoint}"
-        print(f"📡 Fetching: {url}")
+        print(f"\n[REQUEST] Fetching: {url}")
 
         try:
             response = requests.get(url, timeout=120)
             response.raise_for_status()
-
             data = response.json()
-            output_path = OUTPUT_DIR / f"{name}.json"
 
+            output_path = OUTPUT_DIR / f"{file_key}.json"
             with open(output_path, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=2)
 
-            print(f"✅ Saved: {output_path}")
+            print(f"[OK] Saved → {output_path}")
 
         except requests.exceptions.RequestException as e:
-            print(f"❌ Error fetching {name}: {e}")
+            print(f"[ERROR] Failed for {file_key}: {e}")
+
         except json.JSONDecodeError:
-            print(f"⚠️ Non-JSON response for {name}, skipping.")
+            print(f"[WARN] Non-JSON response for {file_key}, skipped.")
 
     print("\n🎉 Precomputation complete!")
-    print(f"All fresh API responses saved in: {OUTPUT_DIR.resolve()}")
+    print(f"All JSON files saved in: {OUTPUT_DIR.resolve()}")

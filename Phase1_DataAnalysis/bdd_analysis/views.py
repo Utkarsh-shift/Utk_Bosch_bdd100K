@@ -77,28 +77,145 @@ def api_root(request):
     })
 
 
+import json
+from pathlib import Path
+from django.http import JsonResponse
 
 def dataset_summary_api(request):
     dataset_root = os.getenv("BDD100K_ROOT") or os.getenv("DATASET_PATH")
-    recompute = handle_recompute(request, "dataset_summary", Path(dataset_root))
+    dataset_root = Path(dataset_root)
+    print("Dataset root in API: *************", dataset_root)
 
-    summary = compute_dataset_summary(recompute=recompute)
-    summary["meta"] = {"cache_status": "miss" if recompute else "hit"}
-    return JsonResponse(summary, json_dumps_params={"indent": 2})
+    # Precomputed fallback file
+    print(os.getcwd())
+    precomputed_path = Path(os.getcwd() + "/precomputed_backend/data_summary.json")
+    print("Precomputed path:^^^^^^^^^^", precomputed_path)
+    if precomputed_path.exists():
+            with open(precomputed_path, "r") as f:
+                print("Precomputed file found")
+                summary = json.load(f)
+            summary["meta"] = {
+                "cache_status": "precomputed",
+                "note": "Dataset missing. Loaded precomputed summary."
+            }
+            return JsonResponse(summary, json_dumps_params={"indent": 2})
+    # If recompute=1 → FORCE compute
+    recompute = handle_recompute(request, "dataset_summary", dataset_root)
+
+    # Try normal computation first
+    if not recompute:
+        try:
+            summary = compute_dataset_summary(recompute=False)
+            summary["meta"] = {"cache_status": "hit"}
+            return JsonResponse(summary, json_dumps_params={"indent": 2})
+        except FileNotFoundError:
+            # dataset missing → fallback
+            pass
+
+    # Try recompute
+    try:
+        summary = compute_dataset_summary(recompute=True)
+        summary["meta"] = {"cache_status": "miss"}
+        return JsonResponse(summary, json_dumps_params={"indent": 2})
+
+    except Exception as e:
+        # FINAL FALLBACK → use precomputed file
+        if precomputed_path.exists():
+            with open(precomputed_path, "r") as f:
+                summary = json.load(f)
+            summary["meta"] = {
+                "cache_status": "precomputed",
+                "note": "Dataset missing. Loaded precomputed summary."
+            }
+            return JsonResponse(summary, json_dumps_params={"indent": 2})
+
+        # nothing available → return error
+        return JsonResponse(
+            {
+                "error": "Dataset files missing and precomputed summary not found.",
+                "exception": str(e),
+                "expected_dataset_root": str(dataset_root),
+                "expected_precomputed_file": str(precomputed_path.resolve())
+            },
+            status=500
+        )
 
 
 
 
+import json
+from pathlib import Path
+from django.http import JsonResponse
 
 def class_distribution_api(request):
-    recompute = handle_recompute(request, "class_distribution", Path(os.getenv("BDD100K_ROOT")))
-    result = compute_class_distribution(recompute=recompute)
-    result["meta"] = {"cache_status": "miss" if recompute else "hit"}
-    return JsonResponse(result, json_dumps_params={"indent": 2})
+    dataset_root = Path(os.getenv("BDD100K_ROOT") or os.getenv("DATASET_PATH"))
+    precomputed_path = Path("precomputed_backend/class_distribution.json")
+    precomputed_path = Path(os.getcwd() + "/precomputed_backend/class_distribution.json")
+    print("Precomputed path:^^^^^^^^^^", precomputed_path)
+    if precomputed_path.exists():
+            with open(precomputed_path, "r") as f:
+                summary = json.load(f)
+            summary["meta"] = {
+                "cache_status": "precomputed",
+                "note": "Dataset missing. Loaded precomputed summary."
+            }
+            return JsonResponse(summary, json_dumps_params={"indent": 2})
+    # Check for recompute
+    recompute = handle_recompute(request, "class_distribution", dataset_root)
+
+    # ================================
+    # 1️⃣ Try NORMAL (cached) computation
+    # ================================
+    if not recompute:
+        try:
+            result = compute_class_distribution(recompute=False)
+            result["meta"] = {"cache_status": "hit"}
+            return JsonResponse(result, json_dumps_params={"indent": 2})
+        except FileNotFoundError:
+            pass  # dataset files missing → fallback to next steps
+
+    # ================================
+    # 2️⃣ Try FORCED recompute
+    # ================================
+    try:
+        result = compute_class_distribution(recompute=True)
+        result["meta"] = {"cache_status": "miss"}
+        return JsonResponse(result, json_dumps_params={"indent": 2})
+
+    except Exception as e:
+        # Dataset missing OR compute failed
+        pass
+
+    # ================================
+    # 3️⃣ FINAL FALLBACK → Precomputed File
+    # ================================
+    if precomputed_path.exists():
+        with open(precomputed_path, "r") as f:
+            result = json.load(f)
+
+        result["meta"] = {
+            "cache_status": "precomputed",
+            "note": "Dataset missing. Loaded precomputed class distribution."
+        }
+
+        return JsonResponse(result, json_dumps_params={"indent": 2})
+
+    # ================================
+    # 4️⃣ No precomputed file → return error
+    # ================================
+    return JsonResponse(
+        {
+            "error": "Dataset files missing and no precomputed class_distribution.json found.",
+            "expected_precomputed_path": str(precomputed_path.resolve()),
+            "expected_dataset_root": str(dataset_root),
+        },
+        status=500
+    )
 
 
 from .utils.image_stats import compute_visual_distributions
 from django.views.decorators.csrf import csrf_exempt
+
 
 @csrf_exempt
 def visual_distributions_api(request):
