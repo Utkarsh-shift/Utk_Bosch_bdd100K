@@ -461,11 +461,3 @@ git commit -m "Enable git-lfs for large binaries"
 
 ---
 
-# Final notes & next steps I can help with
-
-* I can generate:
-
-  * a short `CONTRIBUTING.md`
-  * a `docker-compose` snippet if you want changes (for example persistent volumes for `precomputed_backend`),
-  * the Phase 2 README, Phase 3 README, or a combined root README that ties all 3 phases together.
-* I can also produce a `precompute_backend_data.py` skeleton (if you want code) that outputs the JSON keys exactly as the frontend expects, or add auth and job-queue patterns for safe recompute.
