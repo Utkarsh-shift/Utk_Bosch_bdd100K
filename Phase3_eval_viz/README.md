@@ -1,375 +1,337 @@
-Below is a **professionally structured Phase 3 README** for your repo — matching the same format, depth, and tone as your Phase 1 & Phase 2 READMEs.
-
-It fully explains **dataset pathing, JSON→YOLO conversion, evaluation workflow, metrics (IoU, AR, AP_S/M/L, L1/L2, IoU variance, F-beta, PR metrics, efficiency metrics, FLOPs, latency, robustness), directory structure**, code descriptions, and complete execution commands.
 
 ---
 
-# **📦 Phase 3 — Comprehensive Model Evaluation & Metrics Framework (BDD100K + YOLOv8)**
+# YOLOv8 Training Script (Built-In Ultralytics DataLoader)
 
-This folder implements a **full end-to-end evaluation framework** for YOLOv8 on the BDD100K dataset.
-It provides **deep diagnostic insights**, including:
+This script provides a clean, configuration-driven training workflow for YOLOv8 models on the BDD100K dataset, using Ultralytics’ built-in DataLoader instead of a custom dataloader.
 
-### ✔️ Dataset Conversion (JSON → YOLO)
+The script performs:
 
-### ✔️ Standard YOLO Validation
+* Loading hyperparameters from a YAML config file
+* Automatic creation of a YOLO-compatible dataset YAML
+* YOLOv8 training using Ultralytics’ `.train()` API
+* Optional validation using YOLOv8’s `.val()` API
 
-### ✔️ Precision–Recall from Predictions
-
-### ✔️ Localization Metrics (IoU, L1/L2, IoU Variance)
-
-### ✔️ Efficiency Metrics (FPS, Latency, FLOPs, Params, Model Size)
-
-### ✔️ Additional Metrics (AR, AP_S/M/L, F-Beta)
-
-### ✔️ Export of All Metrics into JSON Reports
-
-### ✔️ Organized results inside timestamped folders
+It is intended for the "Phase 1 / Phase 2" part of your repository.
 
 ---
 
-# **📁 Folder Structure (Phase 3)**
+# Key Features
+
+### 1. Configuration-Driven Workflow
+
+All training settings are read from a YAML config, including:
+
+* Dataset paths
+* Class names and number of classes
+* Model weights
+* Learning rate, batch size, image size, epochs
+* Hardware/Device selection (CPU/GPU)
+
+### 2. Automatic Dataset YAML Generation
+
+The script generates a YOLOv8 dataset YAML file automatically:
 
 ```
-Phase3_eval_viz/
-├── bdd_eval_data.yaml                # Auto-generated YOLO dataset config
-├── gt_labels/                        # YOLO labels created from JSON
-│   ├── *.txt
+path: <dataset_root>
+train: images/train
+val: images/val
+nc: <num_classes>
+names: <class_names>
+```
+
+### 3. Built-In YOLOv8 Training Pipeline
+
+Uses:
+
+* Pretrained weights (default: yolov8m.pt)
+* AdamW optimizer
+* Automatic checkpoints
+* Built-in validation and plots
+* Built-in logging
+
+### 4. Hardware Auto-Selection
+
+If CUDA is requested but unavailable, the script safely falls back to CPU.
+
+### 5. Validation Pipeline
+
+In addition to training, the script supports:
+
+```
+--validate-only
+--model-path <custom.pt>
+```
+
+for running standalone validation.
+
+---
+
+# File Structure
+
+```
+scripts/
+│   train_yolo_builtin.py
+configs/
+│   bdd100k_subset.yaml
+dataset_root/
+│   images/
+│       train/
+│       val/
+│   labels/
+│       train/
+│       val/
+```
+
+---
+
+# Configuration Example
+
+Below is a minimal configuration file expected by the script:
+
+```yaml
+paths:
+  subset_root: ./bdd100k_subset
+  output_root: ./runs_yolo
+
+dataset:
+  num_classes: 10
+  class_names: ["bike","bus","car","motor","person","rider","traffic light","traffic sign","train","truck"]
+
+training:
+  epochs: 50
+  batch_size: 8
+  img_size: 640
+  lr: 0.001
+  weights: yolov8m.pt
+  num_workers: 4
+
+hardware:
+  device: cuda
+```
+
+---
+
+# Running the Training Script
+
+## Train YOLOv8
+
+```
+python scripts/train_yolo_builtin.py --config ./configs/bdd100k_subset.yaml
+```
+
+## Validate Only
+
+```
+python scripts/train_yolo_builtin.py \
+    --config ./configs/bdd100k_subset.yaml \
+    --validate-only \
+    --model-path ./runs_yolo/yolov8m_builtin/weights/best.pt
+```
+
+---
+
+# Metrics Explained
+
+This section defines every metric computed by YOLOv8 (built-in) and the extended metrics from your Phase 3 evaluation pipeline.
+You can reuse this block across Phase 2 and Phase 3 READMEs.
+
+---
+
+# Classification and Detection Metrics
+
+### Precision
+
+Precision = TP / (TP + FP)
+Represents "how many predicted detections were correct."
+High precision means few false positives.
+
+### Recall
+
+Recall = TP / (TP + FN)
+Represents "how many actual objects were successfully detected."
+High recall means few missed objects.
+
+### F-Beta Score (β=2)
+
+Weighted combination of Precision and Recall that emphasizes Recall:
+
+```
+Fβ = (1 + β²) * (P * R) / (β² * P + R)
+```
+
+With β=2, recall is weighted 4× more than precision.
+Useful for safety-critical applications where missing an object is worse than a false detection.
+
+---
+
+# IoU-Based Metrics
+
+### IoU (Intersection over Union)
+
+Measures how well predicted boxes overlap with ground truth:
+
+```
+IoU = Area(Intersection) / Area(Union)
+```
+
+### mAP@0.5
+
+Mean Average Precision at IoU threshold of 0.50.
+Detection is considered correct if IoU ≥ 0.50.
+
+### mAP@0.5:0.95
+
+Average mAP over 10 IoU thresholds (0.50 to 0.95).
+This is the COCO standard and is harder to optimize.
+
+### Custom AP at IoUThreshold (mAP@0.40, mAP@0.75)
+
+Your script also computes:
+
+* AP@0.40 (more lenient)
+* AP@0.75 (more strict)
+
+These give a clearer understanding of model behavior at different IoU demands.
+
+### Mean IoU
+
+Average IoU over all matched predictions.
+Measures bounding box alignment quality.
+
+### IoU Variance
+
+Variance of IoU values:
+
+* Low variance = stable detection performance.
+* High variance = inconsistent bounding box quality.
+
+### IoU Stability per Class
+
+Standard deviation of IoU values per class.
+Shows which classes are less consistent (e.g., bus vs. traffic light).
+
+---
+
+# Object-Scale Metrics
+
+BDD100K and COCO define object sizes using bounding-box area.
+
+### AP_S (Small Objects)
+
+Average Precision on objects with area < 32×32 px.
+Measures small object detection ability (e.g., traffic lights).
+
+### AP_M (Medium Objects)
+
+Average Precision on objects with area between 32×32 and 96×96.
+
+### AP_L (Large Objects)
+
+Average Precision on objects ≥ 96×96.
+Usually highest AP due to easier visibility.
+
+### Average Recall (AR)
+
+Average recall across IoU thresholds and object sizes.
+Captures how completely the model finds objects.
+
+---
+
+# Localization Regression Metrics
+
+These metrics quantify how accurate bounding boxes are positioned.
+
+### L1 Error (Manhattan Distance)
+
+L1 = Σ |pred_i − gt_i|
+Measures absolute differences between predicted and GT box coordinates.
+
+### L2 Error (Euclidean Distance)
+
+L2 = sqrt(Σ (pred_i − gt_i)²)
+More sensitive to large deviations than L1.
+
+Low L1/L2 errors indicate accurate localization.
+
+---
+
+# PR-Based Detection Metrics
+
+### True Positives (TP)
+
+Predicted box correctly matched to ground truth with IoU ≥ threshold.
+
+### False Positives (FP)
+
+Predictions that do not match any ground truth.
+
+### False Negatives (FN)
+
+Ground truth boxes that were not detected.
+
+Your script saves TP/FP/FN in JSON as part of the PR metrics.
+
+---
+
+# Model Efficiency Metrics
+
+These metrics measure compute cost and runtime performance.
+
+### Latency (ms)
+
+Time taken for one forward pass of the model.
+
+### FPS (Frames per Second)
+
+Number of images the model can process per second.
+
+```
+FPS = 1000 / latency(ms)
+```
+
+### FLOPs (GFLOPs)
+
+Floating Point Operations required for one inference pass.
+Measured using the THOP library.
+
+### Parameter Count (Millions)
+
+Number of trainable weights in the model.
+
+### Model Size (MB)
+
+Size of the weight file (.pt) on disk.
+
+### GPU Memory Usage (MB)
+
+VRAM required during inference.
+
+These are essential metrics when deploying on embedded devices like Bosch ECUs, automotive chips, TPUs, Jetson, etc.
+
+---
+
+# Internal Architecture (High-Level)
+
+```
+train_yolo_builtin.py
 │
-├── evaluation/
-│   └── results/
-│       ├── val_run_<timestamp>/      # YOLO evaluation outputs
-│       │   ├── predictions.json
-│       │   ├── confusion_matrix.png
-│       │   ├── PR_curve.png
-│       │   ├── ... YOLO default outputs ...
-│       ├── efficiency_metrics.json
-│       ├── localization_metrics.json
-│       ├── precision_recall_metrics.json
-│       ├── additional_metrics.json
-│       ├── all_metrics.json
-│
-├── scripts/
-│   └── phase3_eval.py                # Full evaluation pipeline
+├── load_config()              # loads YAML config
+├── create_dataset_yaml()      # auto-generates YOLO dataset YAML
+├── train_yolo_builtin()       # runs model.train()
+├── validate_yolo_model()      # runs model.val()
+└── __main__                   # argument parser
 ```
 
 ---
 
-# **1. 🔄 Phase 3 Overview**
+# Summary
 
-This phase evaluates the trained YOLOv8 model using a much more **advanced custom evaluation pipeline** than default YOLO APIs.
+This training script provides a clean, extensible training pipeline for YOLOv8, supporting:
 
-Evaluation includes:
+* Fully YAML-driven configuration
+* Automated dataset preparation
+* Built-in Ultralytics training and validation
+* GPU/CPU auto-handling
+* Easy extensibility for your Phase 3 evaluation framework
 
-### **➤ Standard YOLO Metrics**
-
-* mAP@0.5
-* mAP@0.5:0.95
-* Precision
-* Recall
-* Confusion matrices
-* PR curves
-
-### **➤ Additional High-Level Metrics**
-
-* **Average Recall (AR)**
-* **AP for Small, Medium, Large objects (AP_S, AP_M, AP_L)**
-* **F-Beta (β=2)** — prioritizes recall (important for safety-critical systems)
-
-### **➤ Localization Quality Metrics**
-
-* **L1 Regression Error**
-* **L2 Regression Error**
-* **Mean IoU**
-* **IoU Variance**
-* **IoU Stability per Class**
-
-### **➤ Efficiency Metrics**
-
-* **Inference Latency (ms)**
-* **FPS**
-* **GFLOPs**
-* **Parameter Count**
-* **Model Size (MB)**
-* **GPU Memory Footprint**
-
-All metrics are saved in **JSON files** and displayed in CLI too.
-
----
-
-# **2. 🔧 Step-by-Step Workflow**
-
----
-
-## **STEP 1 — Convert JSON → YOLO Labels**
-
-BDD100K labels are in JSON format.
-This pipeline converts them to YOLO:
-
-```python
-converter = BDD100KConverter(
-    json_path=json_path,
-    image_dir=image_dir,
-    output_label_dir=label_dir
-)
-converter.convert()
-```
-
-### ✨ Output
-
-Labels saved in:
-
-```
-Phase3_eval_viz/gt_labels/*.txt
-```
-
----
-
-## **STEP 2 — Generate YOLO Dataset YAML**
-
-The evaluator auto-writes:
-
-```
-path: <bdd_root>
-train: images/100k/train
-val: images/100k/val
-names:
-  0: person
-  1: rider
-  ...
-```
-
-Saved as:
-
-```
-Phase3_eval_viz/bdd_eval_data.yaml
-```
-
----
-
-## **STEP 3 — Run YOLO Validation**
-
-```python
-results = model.val(
-    data=str(self.data_yaml_path),
-    split="val",
-    imgsz=640,
-    save_json=True,
-    save_txt=True,
-    project=str(self.output_dir),
-    name=f"val_run_<timestamp>"
-)
-```
-
-Outputs:
-
-* `predictions.json`
-* Confusion matrices
-* PR curves
-* Per-class stats
-
----
-
-## **STEP 4 — Compute Efficiency Metrics**
-
-Key measurements:
-
-* Inference latency
-* FPS
-* FLOPs (THOP)
-* Model size
-* GPU memory usage
-
-Saved as:
-
-```
-evaluation/results/efficiency_metrics.json
-```
-
----
-
-## **STEP 5 — Compute Additional Metrics**
-
-Includes:
-
-* AR
-* AP_S / AP_M / AP_L
-* F-beta score (β=2)
-* IoU Variance
-
-Saved as:
-
-```
-evaluation/results/additional_metrics.json
-```
-
----
-
-## **STEP 6 — Compute Localization Metrics**
-
-Based on Hungarian matching (optimal GT–prediction assignment):
-
-* L1 Regression Error
-* L2 Regression Error
-* Mean IoU
-* IoU Variance
-* Per-class IoU stability
-
-Saved as:
-
-```
-evaluation/results/localization_metrics.json
-```
-
----
-
-## **STEP 7 — Precision–Recall (Custom)**
-
-Computed directly from:
-
-```
-predictions.json vs YOLO GT Labels
-```
-
-Metrics:
-
-* TP
-* FP
-* FN
-* Precision
-* Recall
-* F-beta (β=2)
-
-Saved as:
-
-```
-evaluation/results/precision_recall_metrics.json
-```
-
----
-
-## **STEP 8 — Final Report Assembly**
-
-Everything is merged:
-
-```
-evaluation/results/all_metrics.json
-```
-
----
-
-# **3. 🧠 Core Classes & Their Responsibilities**
-
----
-
-## **📌 BDD100KConverter**
-
-* Converts JSON labels → YOLO format
-* Filters invalid boxes
-* Normalizes to 0–1 range
-
----
-
-## **📌 BBoxMatcher**
-
-* Hungarian algorithm matching
-* Computes IoU
-* Computes L1/L2 box error distances
-
----
-
-## **📌 BDD100KEvaluator**
-
-This is the **heart of Phase 3**.
-
-It performs:
-
-### ✔ YOLO Validation
-
-### ✔ Efficiency Metrics
-
-### ✔ Additional Metrics
-
-### ✔ Localization Metrics
-
-### ✔ Precision–Recall Metrics
-
-### ✔ Final Report Generation
-
----
-
-# **4. ▶️ Running Phase 3 Evaluation**
-
-Navigate to repo root:
-
-```bash
-cd Utk_Bosch_bdd100K/Phase3_eval_viz/scripts
-python phase3_eval.py
-```
-
----
-
-# **5. 📤 Output Files Generated (Full List)**
-
-### **Inside:**
-
-```
-Phase3_eval_viz/evaluation/results/
-```
-
-### YOLO Outputs
-
-* predictions.json
-* labels
-* PR_curve.png
-* F1_curve.png
-* confusion_matrix.png
-
-### Custom Metrics
-
-* `efficiency_metrics.json`
-* `additional_metrics.json`
-* `localization_metrics.json`
-* `precision_recall_metrics.json`
-* `all_metrics.json`
-
----
-
-# **6. 📌 Key Advantages of This Phase 3 Pipeline**
-
-### ✔ Goes far beyond standard YOLO evaluation
-
-### ✔ Computes safety-critical metrics (F-beta, IoU stability, regression errors)
-
-### ✔ Provides computational benchmarking (FPS, latency, FLOPs)
-
-### ✔ Produces multiple JSON artifacts for downstream dashboards
-
-### ✔ Full reproducibility
-
-### ✔ Modular and extendable for future phases
-
----
-
-# **7. 🏁 Final Summary**
-
-Phase 3 automates **everything** needed for professional-grade analysis of a detection model:
-
-| Category            | Coverage                  |
-| ------------------- | ------------------------- |
-| YOLO Validation     | ✔ Fully included          |
-| JSON → YOLO Labels  | ✔ Automated               |
-| Efficiency Analysis | ✔ Latency, FLOPs, Params  |
-| Advanced Metrics    | ✔ AR, AP_S/M/L            |
-| Robust IoU Analysis | ✔ IoU variance, Stability |
-| Regression Analysis | ✔ L1 / L2 bbox errors     |
-| PR Metrics          | ✔ TP/FP/FN, F-beta        |
-| Exports             | ✔ JSON, plots, labels     |
-
----
-
-If you want, I can also create:
-
-✅ A **Phase3 README badge section**
-✅ A **root-level README linking all phases**
-✅ A **report-style PDF summary**
-Just say **"Generate badge version"** or **"Generate report PDF"**.
